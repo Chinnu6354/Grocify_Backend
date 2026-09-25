@@ -135,54 +135,29 @@ It provides APIs for authentication, products, cart, wishlist, orders, contact m
 \---
 
 
-
-\# 🏗️ Architecture
-
-
+# 🏗️ Architecture
 
 ```text
-
 React.js Frontend
-
-&#x20;      │
-
-&#x20;      │ REST API / JSON
-
-&#x20;      ▼
-
+       │
+       │ REST API / JSON
+       ▼
 Spring Boot Backend
-
-&#x20;      │
-
-&#x20;      ├── Controller Layer
-
-&#x20;      │
-
-&#x20;      ├── Service Layer
-
-&#x20;      │
-
-&#x20;      ├── Repository Layer
-
-&#x20;      │
-
-&#x20;      ▼
-
-&#x20;    MySQL
-
-&#x20;      
-
-&#x20;      ├── Cloudinary
-
-&#x20;      │     └── Product Images
-
-&#x20;      │
-
-&#x20;      └── Gmail SMTP
-
-&#x20;            └── OTP / Email
-
-
+       │
+       ├── Controller Layer
+       │
+       ├── Service Layer
+       │
+       ├── Repository Layer
+       │
+       ▼
+     MySQL
+       
+       ├── Cloudinary
+       │     └── Product Images
+       │
+       └── Gmail SMTP
+             └── OTP / Email
 
 
 
@@ -190,42 +165,24 @@ Spring Boot Backend
 
 💻 Technologies
 
-Backend
-
-Java
-
-Spring Boot
-
-Spring Security
-
-Spring Data JPA
-
-Hibernate
-
-REST API
-
-JWT
-
-Maven
-
-Database
-
-MySQL
-
-External Services
-
-Cloudinary
-
-Gmail SMTP
-
-Tools
-
-IntelliJ IDEA
-
-Postman
-
-Git
-
+Backend:
+- Java
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Hibernate
+- REST API
+- JWT
+- Maven
+- Database
+- MySQL
+- External Services
+- Cloudinary
+- Gmail SMTP
+- Tools
+- IntelliJ IDEA
+- Postman
+- Git
 GitHub
 
 
@@ -235,172 +192,76 @@ GitHub
 📁 Project Structure
 
 src/
-
 └── main/
-
-&#x20;   ├── java/
-
-&#x20;   │   └── com/grocify/backend/
-
-&#x20;   │
-
-&#x20;   │       ├── config/
-
-&#x20;   │       │   ├── CloudinaryConfig.java
-
-&#x20;   │       │   └── SecurityConfig.java
-
-&#x20;   │       │
-
-&#x20;   │       ├── controller/
-
-&#x20;   │       │   ├── AuthController.java
-
-&#x20;   │       │   ├── CartController.java
-
-&#x20;   │       │   ├── ContactMessageController.java
-
-&#x20;   │       │   ├── OrderController.java
-
-&#x20;   │       │   ├── OtpController.java
-
-&#x20;   │       │   ├── ProductController.java
-
-&#x20;   │       │   └── WishlistController.java
-
-&#x20;   │       │
-
-&#x20;   │       ├── dto/
-
-&#x20;   │       │
-
-&#x20;   │       ├── entity/
-
-&#x20;   │       │
-
-&#x20;   │       ├── repository/
-
-&#x20;   │       │
-
-&#x20;   │       ├── security/
-
-&#x20;   │       │   └── JwtAuthenticationFilter.java
-
-&#x20;   │       │
-
-&#x20;   │       └── service/
-
-&#x20;   │
-
-&#x20;   └── resources/
-
-&#x20;       └── application.properties
-
-
+    ├── java/
+    │   └── com/grocify/backend/
+    │
+    │       ├── config/
+    │       │   ├── CloudinaryConfig.java
+    │       │   └── SecurityConfig.java
+    │       │
+    │       ├── controller/
+    │       │   ├── AuthController.java
+    │       │   ├── CartController.java
+    │       │   ├── ContactMessageController.java
+    │       │   ├── OrderController.java
+    │       │   ├── OtpController.java
+    │       │   ├── ProductController.java
+    │       │   └── WishlistController.java
+    │       │
+    │       ├── dto/
+    │       │
+    │       ├── entity/
+    │       │
+    │       ├── repository/
+    │       │
+    │       ├── security/
+    │       │   └── JwtAuthenticationFilter.java
+    │       │
+    │       └── service/
+    │
+    └── resources/
+        └── application.properties
 
 .env.example
-
 Dockerfile
-
 pom.xml
-
 mvnw
-
 mvnw.cmd
 
 
 
-
-
-
-
-API Structure
-
-
-
-The backend exposes REST APIs such as:
-
-
-
-/api/auth/\*\*
-
-/api/products
-
-/api/cart
-
-/api/wishlist
-
-/api/orders
-
-/api/auth/forgot-password/\*\*
-
-
-
-
-
-
-
 🔒 Security
-
-
-
 The backend uses:
 
-
-
-Spring Security
-
-JWT authentication
-
-BCrypt password hashing
-
-Role-based authorization
-
-CORS configuration
-
-Environment variables for credentials
-
-Protected REST endpoints
-
-
-
+- Spring Security
+- JWT authentication
+- BCrypt password hashing
+-Role-based authorization
+- CORS configuration
+- Environment variables for credentials
+- Protected REST endpoints
 
 
 🧪 API Testing
 
-
-
-The APIs can be tested using Postman.
-
-
-
-The project includes Postman collections for testing the backend APIs.
-
+- The APIs can be tested using Postman.
+- The project includes Postman collections for testing the backend APIs.
 
 
 Typical flow:
 
-
-
 Signup
-
-&#x20;  ↓
-
+   ↓
 OTP Verification
-
-&#x20;  ↓
-
+   ↓
 Login
-
-&#x20;  ↓
-
+   ↓
 JWT Token
-
-&#x20;  ↓
-
+   ↓
 Authenticated API Requests
-
-&#x20;  ↓
+   ↓
+Cart / Wishlist / Orders
 
 Cart / Wishlist / Orders
 
