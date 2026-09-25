@@ -21,7 +21,6 @@ It provides APIs for authentication, products, cart, wishlist, orders, contact m
 \### 🔐 Authentication \& Security
 
 
-
 \- User registration
 
 \- User login
@@ -63,10 +62,7 @@ It provides APIs for authentication, products, cart, wishlist, orders, contact m
 \- Admin-only product management
 
 
-
 \### 🛒 Cart
-
-
 
 \- Add products to cart
 
@@ -266,64 +262,26 @@ Cart / Wishlist / Orders
 Cart / Wishlist / Orders
 
 
-
-
-
 🔗 Frontend
-
-
-
 The backend is designed to work with the Grocify React frontend.
 
-
-
 Frontend repository:
-
-
-
 https://github.com/Chinnu6354/Grocify\_Clone
 
-
-
 Backend repository:
-
-
-
 https://github.com/Chinnu6354/Grocify\_Backend
 
-
-
-
-
 👨‍💻 Author
-
-
-
 Chinnu Pradhan
 
-
-
 Full Stack Developer
-
-
-
 Java • Spring Boot • React.js • MySQL • REST APIs 
-
-
-
 
 
 \### One thing I'd change from the frontend README
 
-
-
 For the backend README, \*\*don't claim deployment is completed yet\*\*. We have verified it locally, but we're still working on cloud deployment.
-
-
-
 So the current status is:
-
-
 
 \*\*Local:\*\* ✅ Complete  
 
