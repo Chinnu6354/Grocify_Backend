@@ -238,7 +238,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 Arrays.asList(
                         "http://localhost:5173",
-                        "https://grocify-clone-three.vercel.app/"
+                        "https://grocify-clone-three.vercel.app"
                 )
         );
 
