@@ -36,7 +36,6 @@ public class UserService {
 
     public LoginResponse login(String email, String password) {
 
-        System.out.println("LOGIN METHOD CALLED");
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));

@@ -204,7 +204,7 @@ public class SecurityConfig {
                                 "/api/orders/*/status"
                         ).hasRole("ADMIN")
 
-
+                        .requestMatchers("/", "/").permitAll()
                         // =========================
                         // EVERYTHING ELSE
                         // =========================
@@ -237,7 +237,8 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(
                 Arrays.asList(
-                        "http://localhost:5173"
+                        "http://localhost:5173",
+                        "https://grocify-clone-three.vercel.app/"
                 )
         );
 
