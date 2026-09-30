@@ -7,14 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.grocify.backend.service.OtpService;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserService userService;
+    private final OtpService otpService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService,OtpService otpService) {
         this.userService = userService;
+        this.otpService = otpService;
     }
 
     @GetMapping("/test")
@@ -50,6 +54,34 @@ public class AuthController {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(e.getMessage());
+        }
+    }
+    @PostMapping("/signup/send-otp")
+    public ResponseEntity<?> sendSignupOtp(
+            @RequestBody User user
+    ) {
+
+        try {
+
+            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Email already registered");
+            }
+
+            otpService.generateAndSaveOtp(user.getEmail());
+
+            return ResponseEntity.ok(
+                    "OTP sent successfully"
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to send OTP");
         }
     }
 }
