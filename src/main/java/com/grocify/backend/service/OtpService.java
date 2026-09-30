@@ -71,7 +71,8 @@ public class OtpService {
                                         "<p>This OTP is valid for 5 minutes.</p>" +
                                         "<p>Please do not share this OTP with anyone.</p>" +
                                         "<br>" +
-                                        "<p>Thank you,<br>Grocify Team</p>"
+                                        "<p>Thank you,<br>" +
+                                        "Grocify Team</p>"
                         )
                         .build();
 
@@ -93,7 +94,8 @@ public class OtpService {
             e.printStackTrace();
 
             throw new RuntimeException(
-                    "Unable to send OTP email: " + e.getMessage(),
+                    "Unable to send OTP email: "
+                            + e.getMessage(),
                     e
             );
         }
@@ -125,7 +127,6 @@ public class OtpService {
         // OTP expired
         if (LocalDateTime.now()
                 .isAfter(otp.getExpiresAt())) {
-
             return false;
         }
 
