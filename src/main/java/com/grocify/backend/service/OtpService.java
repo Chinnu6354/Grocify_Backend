@@ -2,49 +2,33 @@ package com.grocify.backend.service;
 
 import com.grocify.backend.entity.Otp;
 import com.grocify.backend.repository.OtpRepository;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.CreateEmailOptions;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import jakarta.annotation.PostConstruct;
-
 @Service
 public class OtpService {
 
     private final OtpRepository otpRepository;
-    private final JavaMailSender mailSender;
+    private final Resend resend;
 
-    public OtpService(
-            OtpRepository otpRepository,
-            JavaMailSender mailSender
-    ) {
+    public OtpService(OtpRepository otpRepository) {
         this.otpRepository = otpRepository;
-        this.mailSender = mailSender;
+
+        String apiKey = System.getenv("RESEND_API_KEY");
+
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException(
+                    "RESEND_API_KEY environment variable is missing"
+            );
+        }
+
+        this.resend = new Resend(apiKey);
     }
-
-
-
-
-    @PostConstruct
-    public void checkMailConfiguration() {
-
-        System.out.println("=================================");
-        System.out.println("MAIL USERNAME: "
-                + System.getenv("MAIL_USERNAME"));
-
-        System.out.println("MAIL PASSWORD PRESENT: "
-                + (System.getenv("MAIL_PASSWORD") != null
-                && !System.getenv("MAIL_PASSWORD").isBlank()));
-
-        System.out.println("=================================");
-    }
-
-
-
-
 
     // =========================
     // GENERATE + SAVE + SEND OTP
@@ -74,34 +58,46 @@ public class OtpService {
         otpRepository.save(otp);
 
         // =========================
-        // SEND OTP TO USER EMAIL
+        // SEND OTP USING RESEND
         // =========================
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
+        CreateEmailOptions emailOptions =
+                CreateEmailOptions.builder()
+                        .from("onboarding@resend.dev")
+                        .to(email)
+                        .subject("Grocify - Email Verification OTP")
+                        .html(
+                                "<h2>Grocify Email Verification</h2>" +
+                                        "<p>Your verification OTP is:</p>" +
+                                        "<h1>" + otpCode + "</h1>" +
+                                        "<p>This OTP is valid for 5 minutes.</p>" +
+                                        "<p>Please do not share this OTP with anyone.</p>" +
+                                        "<br>" +
+                                        "<p>Thank you,<br>Grocify Team</p>"
+                        )
+                        .build();
 
-        message.setTo(email);
+        try {
 
-        message.setSubject(
-                "Grocify - Email Verification OTP"
-        );
+            var response = resend.emails().send(emailOptions);
 
-        message.setText(
-                "Hello,\n\n" +
-                        "Your Grocify verification OTP is:\n\n" +
-                        otpCode +
-                        "\n\n" +
-                        "This OTP is valid for 5 minutes.\n\n" +
-                        "Please do not share this OTP with anyone.\n\n" +
-                        "Thank you,\n" +
-                        "Grocify Team"
-        );
+            System.out.println(
+                    "OTP email sent successfully. Email ID: "
+                            + response.getId()
+            );
 
-        mailSender.send(message);
+        } catch (ResendException e) {
 
-        System.out.println(
-                "OTP sent successfully to: " + email
-        );
+            System.out.println(
+                    "Failed to send OTP email: "
+                            + e.getMessage()
+            );
+
+            throw new RuntimeException(
+                    "Unable to send OTP email",
+                    e
+            );
+        }
     }
 
     // =========================
@@ -130,7 +126,6 @@ public class OtpService {
         // OTP expired
         if (LocalDateTime.now()
                 .isAfter(otp.getExpiresAt())) {
-
             return false;
         }
 
