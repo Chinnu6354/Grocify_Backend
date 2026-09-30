@@ -56,32 +56,5 @@ public class AuthController {
                     .body(e.getMessage());
         }
     }
-    @PostMapping("/signup/send-otp")
-    public ResponseEntity<?> sendSignupOtp(
-            @RequestBody User user
-    ) {
 
-        try {
-
-            if (userService.emailExists(user.getEmail())) {
-                return ResponseEntity
-                        .badRequest()
-                        .body("Email already registered");
-            }
-
-            otpService.generateAndSaveOtp(user.getEmail());
-
-            return ResponseEntity.ok(
-                    "OTP sent successfully"
-            );
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to send OTP");
-        }
-    }
 }
