@@ -7,8 +7,8 @@ import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 @Service
 public class OtpService {
@@ -17,6 +17,7 @@ public class OtpService {
     private final Resend resend;
 
     public OtpService(OtpRepository otpRepository) {
+
         this.otpRepository = otpRepository;
 
         String apiKey = System.getenv("RESEND_API_KEY");
@@ -31,15 +32,15 @@ public class OtpService {
     }
 
     // =========================
-    // GENERATE + SAVE + SEND OTP
+    // GENERATE + SEND + SAVE OTP
     // =========================
 
     public void generateAndSaveOtp(String email) {
 
-        // Generate 6-digit OTP
+        // Generate secure 6-digit OTP
         String otpCode = String.format(
                 "%06d",
-                new Random().nextInt(1000000)
+                new SecureRandom().nextInt(1000000)
         );
 
         // OTP expires after 5 minutes
@@ -53,9 +54,6 @@ public class OtpService {
         otp.setOtp(otpCode);
         otp.setExpiresAt(expiresAt);
         otp.setVerified(false);
-
-        // Save OTP in database
-        otpRepository.save(otp);
 
         // =========================
         // SEND OTP USING RESEND
@@ -79,7 +77,11 @@ public class OtpService {
 
         try {
 
-            var response = resend.emails().send(emailOptions);
+            var response =
+                    resend.emails().send(emailOptions);
+
+            // Save OTP only after email is successfully sent
+            otpRepository.save(otp);
 
             System.out.println(
                     "OTP email sent successfully. Email ID: "
@@ -126,6 +128,7 @@ public class OtpService {
         // OTP expired
         if (LocalDateTime.now()
                 .isAfter(otp.getExpiresAt())) {
+
             return false;
         }
 
