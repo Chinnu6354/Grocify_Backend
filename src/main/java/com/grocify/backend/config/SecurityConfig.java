@@ -94,7 +94,19 @@ public class SecurityConfig {
                         // -------------------------
 
                         .requestMatchers(
-                                "/api/auth/**"
+                                HttpMethod.POST,
+                                "/api/auth/login",
+                                "/api/auth/signup",
+                                "/api/auth/signup/send-otp",
+                                "/api/auth/signup/verify-otp",
+                                "/api/auth/forgot-password/send-otp",
+                                "/api/auth/forgot-password/verify-otp",
+                                "/api/auth/forgot-password/reset"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/auth/test"
                         ).permitAll()
 
                         .requestMatchers(
