@@ -90,13 +90,10 @@ public class OtpService {
 
         } catch (ResendException e) {
 
-            System.out.println(
-                    "Failed to send OTP email: "
-                            + e.getMessage()
-            );
+            e.printStackTrace();
 
             throw new RuntimeException(
-                    "Unable to send OTP email",
+                    "Unable to send OTP email: " + e.getMessage(),
                     e
             );
         }
