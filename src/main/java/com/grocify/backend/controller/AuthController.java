@@ -17,6 +17,12 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @GetMapping("/test")
+    public String test() {
+        System.out.println("AUTH TEST ENDPOINT CALLED");
+        return "AUTH API WORKING";
+    }
+
     @PostMapping("/signup")
     public User signup(@RequestBody User user) {
         return userService.signup(user);
