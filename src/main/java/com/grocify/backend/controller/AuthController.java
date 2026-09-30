@@ -63,7 +63,7 @@ public class AuthController {
 
         try {
 
-            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            if (userService.emailExists(user.getEmail())) {
                 return ResponseEntity
                         .badRequest()
                         .body("Email already registered");
