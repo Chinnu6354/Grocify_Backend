@@ -2,8 +2,10 @@ package com.grocify.backend.controller;
 
 import com.grocify.backend.entity.User;
 import com.grocify.backend.service.UserService;
-import org.springframework.web.bind.annotation.*;
 import com.grocify.backend.dto.LoginResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,14 +23,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
 
         System.out.println("AUTH CONTROLLER LOGIN CALLED");
         System.out.println("LOGIN EMAIL: " + user.getEmail());
 
-        return userService.login(
-                user.getEmail(),
-                user.getPassword()
-        );
+        try {
+
+            LoginResponse response = userService.login(
+                    user.getEmail(),
+                    user.getPassword()
+            );
+
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+
+            System.out.println("LOGIN ERROR: " + e.getMessage());
+
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
+        }
     }
 }

@@ -204,10 +204,7 @@ public class SecurityConfig {
                                 "/api/orders/*/status"
                         ).hasRole("ADMIN")
 
-                        .requestMatchers("/", "/").permitAll()
-                        // =========================
-                        // EVERYTHING ELSE
-                        // =========================
+                        .requestMatchers("/", "/error").permitAll()
 
                         .anyRequest().authenticated()
                 )
@@ -225,9 +222,6 @@ public class SecurityConfig {
     }
 
 
-    // =========================
-    // CORS CONFIGURATION
-    // =========================
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
