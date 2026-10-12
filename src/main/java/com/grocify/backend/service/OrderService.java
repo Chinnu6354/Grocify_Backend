@@ -83,6 +83,7 @@ public class OrderService {
         OrderCreatedEvent event = new OrderCreatedEvent(
                 savedOrder.getId(),
                 user.getId(),
+                user.getEmail(),
                 savedOrder.getTotalAmount(),
                 savedOrder.getStatus(),
                 savedOrder.getCreatedAt()

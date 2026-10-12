@@ -9,6 +9,7 @@ public class OrderCreatedEvent {
     private Double totalAmount;
     private String status;
     private LocalDateTime createdAt;
+    private String userEmail;
 
     public OrderCreatedEvent() {
     }
@@ -16,12 +17,14 @@ public class OrderCreatedEvent {
     public OrderCreatedEvent(
             Long orderId,
             Long userId,
+            String userEmail,
             Double totalAmount,
             String status,
             LocalDateTime createdAt
     ) {
         this.orderId = orderId;
         this.userId = userId;
+        this.userEmail = userEmail;
         this.totalAmount = totalAmount;
         this.status = status;
         this.createdAt = createdAt;
@@ -41,6 +44,14 @@ public class OrderCreatedEvent {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public Double getTotalAmount() {
