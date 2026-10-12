@@ -7,7 +7,7 @@ import com.grocify.backend.entity.OrderItem;
 import com.grocify.backend.entity.User;
 import com.grocify.backend.repository.OrderRepository;
 import org.springframework.stereotype.Service;
-
+import com.grocify.backend.kafka.OrderEventProducer;
 import java.time.LocalDateTime;
 
 @Service
@@ -15,12 +15,15 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CartService cartService;
+    private final OrderEventProducer orderEventProducer;
 
     public OrderService(
             OrderRepository orderRepository,
+            OrderEventProducer orderEventProducer,
             CartService cartService
     ) {
         this.orderRepository = orderRepository;
+        this.orderEventProducer = orderEventProducer;
         this.cartService = cartService;
     }
 
@@ -75,6 +78,10 @@ public class OrderService {
         order.setTotalAmount(totalAmount);
 
         Order savedOrder = orderRepository.save(order);
+
+        orderEventProducer.sendOrderCreatedEvent(
+                "ORDER_CREATED:" + savedOrder.getId()
+        );
 
         cartService.clearCart(user);
 
