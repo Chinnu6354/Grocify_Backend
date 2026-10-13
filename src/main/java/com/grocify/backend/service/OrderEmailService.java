@@ -19,7 +19,7 @@ public class OrderEmailService {
             Double totalAmount
     ) {
         SimpleMailMessage message = new SimpleMailMessage();
-
+        message.setFrom("your-verified-sender@gmail.com");
         message.setTo(email);
         message.setSubject("Grocify Order Confirmation");
 
