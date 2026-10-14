@@ -31,18 +31,11 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    // =========================
-    // PASSWORD ENCODER
-    // =========================
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // =========================
-    // SECURITY CONFIGURATION
-    // =========================
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -51,21 +44,12 @@ public class SecurityConfig {
 
         http
 
-                // =========================
-                // CSRF
-                // =========================
 
                 .csrf(csrf -> csrf.disable())
 
-                // =========================
-                // CORS
-                // =========================
 
                 .cors(cors -> {})
 
-                // =========================
-                // SESSION
-                // =========================
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -73,25 +57,16 @@ public class SecurityConfig {
                         )
                 )
 
-                // =========================
-                // AUTHORIZATION
-                // =========================
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // -------------------------
-                        // CORS PREFLIGHT
-                        // -------------------------
+
 
                         .requestMatchers(
                                 HttpMethod.OPTIONS,
                                 "/**"
                         ).permitAll()
 
-
-                        // -------------------------
-                        // ALL AUTH APIs
-                        // -------------------------
 
                         .requestMatchers(
                                 HttpMethod.POST,
@@ -120,44 +95,37 @@ public class SecurityConfig {
                         ).permitAll()
 
 
-                        // =========================
-                        // PRODUCTS
-                        // =========================
-
-                        // Anyone can view products
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/products"
                         ).permitAll()
 
-                        // Admin can create products
+
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/products"
                         ).hasRole("ADMIN")
 
-                        // Admin can upload images
+
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/products/upload-image"
                         ).hasRole("ADMIN")
 
-                        // Admin can update products
+
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/products/**"
                         ).hasRole("ADMIN")
 
-                        // Admin can delete products
+
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/products/**"
                         ).hasRole("ADMIN")
 
 
-                        // =========================
-                        // CART
-                        // =========================
+
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -179,10 +147,6 @@ public class SecurityConfig {
                                 "/api/cart/**"
                         ).authenticated()
 
-
-                        // =========================
-                        // WISHLIST
-                        // =========================
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -202,10 +166,6 @@ public class SecurityConfig {
 
 
 
-                        // =========================
-                        // ADMIN ORDERS
-                        // =========================
-
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/orders/admin"
@@ -218,12 +178,11 @@ public class SecurityConfig {
 
                         .requestMatchers("/", "/error").permitAll()
 
+                        .requestMatchers("/api/ai").permitAll()
+
                         .anyRequest().authenticated()
                 )
 
-                // =========================
-                // JWT FILTER
-                // =========================
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
