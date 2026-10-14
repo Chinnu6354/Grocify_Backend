@@ -9,6 +9,9 @@ import com.grocify.backend.service.OrderService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -26,10 +29,6 @@ public class OrderController {
         this.userRepository = userRepository;
     }
 
-    // =========================
-    // ADMIN CHECK
-    // =========================
-
     private User getAdmin(String email) {
 
         User user = userRepository.findByEmail(email)
@@ -46,9 +45,6 @@ public class OrderController {
         return user;
     }
 
-    // =========================
-    // PLACE ORDER
-    // =========================
 
     @PostMapping
     public ResponseEntity<Order> placeOrder(
@@ -82,9 +78,6 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    // =========================
-    // GET USER ORDERS
-    // =========================
 
     @GetMapping
     public ResponseEntity<List<Order>> getOrders(
@@ -102,28 +95,18 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    // =========================
-    // GET ALL ORDERS - ADMIN
-    // =========================
-
     @GetMapping("/admin")
     public ResponseEntity<List<Order>> getAllOrders(
             @RequestParam String email
     ) {
 
-        // Check admin
         getAdmin(email);
 
-        // Get all orders
         List<Order> orders =
                 orderService.getAllOrders();
 
         return ResponseEntity.ok(orders);
     }
-
-    // =========================
-    // UPDATE ORDER STATUS - ADMIN
-    // =========================
 
     @PutMapping("/{orderId}/status")
     public ResponseEntity<Order> updateOrderStatus(
@@ -132,7 +115,6 @@ public class OrderController {
             @RequestParam String email
     ) {
 
-        // Check admin
         getAdmin(email);
 
         Order order =
@@ -142,5 +124,16 @@ public class OrderController {
                 );
 
         return ResponseEntity.ok(order);
+    }
+    @PutMapping("/{orderId}/cancel")
+    public Order cancelOrder(
+            @PathVariable Long orderId,
+            @RequestParam String email
+    ) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return orderService.cancelOrder(user, orderId);
     }
 }
